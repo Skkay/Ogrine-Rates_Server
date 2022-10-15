@@ -1,0 +1,12 @@
+{
+    auto_https off
+}
+
+:80 {
+    root * /srv/app/public
+    php_fastcgi unix//var/run/php/php-fpm.sock
+    file_server
+    log {
+        output stdout
+    }
+}
