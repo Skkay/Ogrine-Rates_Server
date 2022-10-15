@@ -8,6 +8,7 @@ services:
       args:
         SYMFONY_VERSION: 6.1.*
         STABILITY: stable
+    container_name: ogrine-rates
     restart: always
     volumes:
       - php_socket:/var/run/php
