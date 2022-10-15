@@ -48,4 +48,9 @@ class OgrineRate
 
         return $this;
     }
+
+    public function getRate(): ?float
+    {
+        return $this->rateTenth / 10;
+    }
 }
