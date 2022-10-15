@@ -18,7 +18,7 @@ class OgrineRate
     private ?\DateTimeInterface $datetime = null;
 
     #[ORM\Column]
-    private ?int $rate = null;
+    private ?int $rateTenth = null;
 
     public function getId(): ?int
     {
@@ -37,14 +37,14 @@ class OgrineRate
         return $this;
     }
 
-    public function getRate(): ?int
+    public function getRateTenth(): ?int
     {
-        return $this->rate;
+        return $this->rateTenth;
     }
 
-    public function setRate(int $rate): self
+    public function setRateTenth(int $rateTenth): self
     {
-        $this->rate = $rate;
+        $this->rateTenth = $rateTenth;
 
         return $this;
     }
