@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OgrineRateRepository::class)]
+#[ORM\UniqueConstraint(name: 'ogrine_rate_idx', columns: ['datetime', 'rate_tenth'])]
 class OgrineRate
 {
     #[ORM\Id]
