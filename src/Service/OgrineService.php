@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\DataObject\FetchedOgrineValues;
+use App\Entity\OgrineRate;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DomCrawler\Crawler;
@@ -15,10 +16,12 @@ class OgrineService
         'User-Agent' => 'Mozilla/5.0',
     ];
 
+    private ObjectManager $om;
     private HttpClientInterface $httpClient;
 
-    public function __construct(HttpClientInterface $httpClient)
+    public function __construct(ManagerRegistry $doctrine, HttpClientInterface $httpClient)
     {
+        $this->om = $doctrine->getManager();
         $this->httpClient = $httpClient;
     }
 
@@ -53,5 +56,18 @@ class OgrineService
         }
 
         throw new \Exception('No <script> tag containing "RATES" was found');
+    }
+
+    public function insertLatestOgrineValue(FetchedOgrineValues $fetchedOgrine)
+    {
+        $ogrineRate = (new OgrineRate())
+            ->setRateTenth($fetchedOgrine->getCurrentRate() * 10)
+            ->setDatetime((new \DateTime())->setTimestamp($fetchedOgrine->getCurrentRateTimestamp()))
+        ;
+
+        $this->om->persist($ogrineRate);
+        $this->om->flush();
+
+        return $ogrineRate;
     }
 }
