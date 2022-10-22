@@ -6,28 +6,30 @@ use App\DataObject\FetchedOgrineValues;
 use App\Entity\OgrineRate;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class OgrineService
 {
-    private const OGRINE_URL = 'https://www.dofus.com/fr/achat-kamas/cours-kama-ogrines'; // TODO: Env var
-    private const HEADERS = [
-        'User-Agent' => 'Mozilla/5.0',
-    ];
-
     private ObjectManager $om;
     private HttpClientInterface $httpClient;
+    private ParameterBagInterface $params;
 
-    public function __construct(ManagerRegistry $doctrine, HttpClientInterface $httpClient)
+    public function __construct(ManagerRegistry $doctrine, HttpClientInterface $httpClient, ParameterBagInterface $params)
     {
         $this->om = $doctrine->getManager();
         $this->httpClient = $httpClient;
+        $this->params = $params;
     }
 
     public function fetchLatestOgrineValue()
     {
-        $response = $this->httpClient->request('GET', self::OGRINE_URL, [ 'headers' => self::HEADERS ]);
+        $response = $this->httpClient->request('GET', $this->params->get('app.request.ogrine.fetch_url'), [
+            'headers' => [
+                'User-Agent' => $this->params->get('app.request.header.user_agent'),
+            ]
+        ]);
 
         $html = $response->getContent();
 

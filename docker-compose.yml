@@ -19,6 +19,8 @@ services:
       start_period: 30s
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?serverVersion=14
+      REQUEST_OGRINE_FETCH_URL: https://www.dofus.com/fr/achat-kamas/cours-kama-ogrines
+      REQUEST_HEADER_USER_AGENT: "Mozilla/5.0"
 
   caddy:
     build:
