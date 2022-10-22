@@ -10,3 +10,4 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+docker-compose.override.yml
