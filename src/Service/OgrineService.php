@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\DataObject\FetchedOgrineValues;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DomCrawler\Crawler;
@@ -42,12 +43,12 @@ class OgrineService
 
                 $timestamps = array_keys($reversedObject);
 
-                return [
-                    'currentRateTimestamp' => substr($timestamps[1], 0, -3),
-                    'currentRate' => $reversedObject[$timestamps[1]],
-                    'previousRateTimestamp' => substr($timestamps[2], 0, -3),
-                    'previousRate' => $reversedObject[$timestamps[2]],
-                ];
+                return new FetchedOgrineValues(
+                    (int) substr($timestamps[1], 0, -3),
+                    (float) $reversedObject[$timestamps[1]],
+                    (int) substr($timestamps[2], 0, -3),
+                    (float) $reversedObject[$timestamps[2]]
+                );
             }
         }
 
