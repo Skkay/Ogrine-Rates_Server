@@ -1,0 +1,16 @@
+framework:
+    http_client:
+        default_options:
+            retry_failed:
+                http_codes:
+                    0: true
+                    408: true
+                    425: true
+                    429: true
+                    500: true
+                    502: true
+                    504: true
+                max_retries: 5
+                delay: 2000
+                multiplier: 2
+                jitter: 0.3
