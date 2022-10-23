@@ -61,6 +61,13 @@ COPY ./docker/php/$BUILD_ARGUMENT_ENV/php.ini /usr/local/etc/php/php.ini
 # enable apache modules
 RUN a2enmod rewrite
 
+# entrypoint
+COPY ./docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+RUN chmod +x /usr/local/bin/docker-entrypoint
+
+ENTRYPOINT ["docker-entrypoint"]
+CMD ["apache2-foreground"]
+
 # install composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN chmod +x /usr/bin/composer
