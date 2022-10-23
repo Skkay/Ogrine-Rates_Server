@@ -1,7 +1,7 @@
 version: "3.4"
 
 services:
-  php:
+  app:
     build:
       context: .
       args:
@@ -36,10 +36,6 @@ services:
 ###< doctrine/doctrine-bundle ###
 
 volumes:
-  php_socket:
-  caddy_data:
-  caddy_config:
-
 ###> doctrine/doctrine-bundle ###
   db-data:
 ###< doctrine/doctrine-bundle ###
