@@ -20,4 +20,7 @@ tag:
 	docker image tag ogrine-rates_app skkay/ogrine-rates:latest
 
 push:
-	docker image push --all-tags skkay/ogrine-rates
+	docker image push skkay/ogrine-rates:$(major)
+	docker image push skkay/ogrine-rates:$(minor)
+	docker image push skkay/ogrine-rates:$(patch)
+	docker image push skkay/ogrine-rates:latest
