@@ -11,9 +11,11 @@ class FetchedOgrineValues
 
     public function __construct(int $currentRateTimestamp, float $currentRate, int $previousRateTimestamp, float $previousRate)
     {
-        $this->currentRateTimestamp = $currentRateTimestamp;
+        $offset = 24 * 60 * 60; // Add 1 day to correct the fetched timestamps
+
+        $this->currentRateTimestamp = $currentRateTimestamp + $offset;
         $this->currentRate = $currentRate;
-        $this->previousRateTimestamp = $previousRateTimestamp;
+        $this->previousRateTimestamp = $previousRateTimestamp + $offset;
         $this->previousRate = $previousRate;
     }
 
