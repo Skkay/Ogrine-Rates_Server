@@ -1,40 +1,45 @@
 version: "3.4"
 
 services:
-  php:
+  app:
     build:
       context: .
-      target: app_php
       args:
-        SYMFONY_VERSION: 6.1.*
-        STABILITY: stable
+        BUILD_ARGUMENT_ENV: prod
+        HOST_UID: ${HOST_UID:-1000}
+        HOST_GID: ${HOST_GID:-1000}
+    container_name: ogrine-rates
     restart: always
-    volumes:
-      - php_socket:/var/run/php
-    healthcheck:
-      interval: 10s
-      timeout: 3s
-      retries: 3
-      start_period: 30s
     environment:
-      # Run "composer require symfony/orm-pack" to install and configure Doctrine ORM
-      DATABASE_URL: postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-app}?serverVersion=${POSTGRES_VERSION:-14}
-
-  caddy:
-    build:
-      context: .
-      target: app_caddy
-    depends_on:
-      - php
-    restart: always
-    volumes:
-      - php_socket:/var/run/php
-      - caddy_data:/data
-      - caddy_config:/config
+      APP_ENV: prod
+      APP_SECRET: ${APP_SECRET}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?serverVersion=14
+      REQUEST_OGRINE_FETCH_URL: https://www.dofus.com/fr/achat-kamas/cours-kama-ogrines
+      REQUEST_HEADER_USER_AGENT: "Mozilla/5.0"
     ports:
       - 8000:80
+    depends_on:
+      - database
+    networks:
+      - internal
+
+###> doctrine/doctrine-bundle ###
+  database:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+    volumes:
+      - db-data:/var/lib/postgresql/data:rw
+    networks:
+      - internal
+###< doctrine/doctrine-bundle ###
 
 volumes:
-  php_socket:
-  caddy_data:
-  caddy_config:
+###> doctrine/doctrine-bundle ###
+  db-data:
+###< doctrine/doctrine-bundle ###
+
+networks:
+  internal:
