@@ -8,7 +8,7 @@ services:
         BUILD_ARGUMENT_ENV: prod
         HOST_UID: ${HOST_UID:-1000}
         HOST_GID: ${HOST_GID:-1000}
-    container_name: ogrine-rates
+    container_name: ogrine-rates_server
     restart: always
     environment:
       APP_ENV: prod
