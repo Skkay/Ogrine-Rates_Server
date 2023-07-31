@@ -13,14 +13,5 @@ up-prod:
 down:
 	docker compose down --remove-orphans
 
-tag:
-	docker image tag ogrine-rates_app skkay/ogrine-rates:$(major)
-	docker image tag ogrine-rates_app skkay/ogrine-rates:$(minor)
-	docker image tag ogrine-rates_app skkay/ogrine-rates:$(patch)
-	docker image tag ogrine-rates_app skkay/ogrine-rates:latest
-
-push:
-	docker image push skkay/ogrine-rates:$(major)
-	docker image push skkay/ogrine-rates:$(minor)
-	docker image push skkay/ogrine-rates:$(patch)
-	docker image push skkay/ogrine-rates:latest
+bash:
+	docker exec -it ogrine-rates_server /bin/bash

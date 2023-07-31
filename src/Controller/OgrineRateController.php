@@ -22,10 +22,10 @@ class OgrineRateController extends AbstractController
     #[Route('/ogrineRates', name: 'app:ogrine_rate.get_all')]
     public function getAll(Request $request): JsonResponse
     {
-        $sort = strtoupper($request->query->get('sort', 'ASC')) === 'DESC' ? 'DESC' : 'ASC';
+        $sort = strtoupper($request->query->get('sort', 'DESC')) === 'DESC' ? 'DESC' : 'ASC';
         $limit = $request->query->getInt('limit', 0) ?: null;
 
-        $ogrineRates = $this->ogrineRateRepository->findBy([], ['id' => $sort], $limit);
+        $ogrineRates = $this->ogrineRateRepository->findBy([], ['datetime' => $sort], $limit);
 
         return $this->json([
             'sort' => $sort,
