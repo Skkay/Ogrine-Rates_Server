@@ -6,17 +6,20 @@ use App\DataObject\FetchedOgrineValues;
 use App\Entity\DiscordWebhook;
 use App\Repository\DiscordWebhookRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DiscordNotificationService
 {
+    private ObjectManager $om;
     private DiscordWebhookRepository $discordWebhookRepository;
     private HttpClientInterface $httpClient;
     private TranslatorInterface $translator;
 
     public function __construct(ManagerRegistry $registry, HttpClientInterface $httpClient, TranslatorInterface $translator)
     {
+        $this->om = $registry->getManager();
         $this->discordWebhookRepository = $registry->getRepository(DiscordWebhook::class);
         $this->httpClient = $httpClient;
         $this->translator = $translator;
@@ -33,13 +36,25 @@ class DiscordNotificationService
 
         $responses = [];
         foreach ($webhooks as $webhook) {
-            $responses[] = $this->send($webhook, [
+            $response = $this->send($webhook, [
                 'current_rate' => $currentRate,
                 'current_rate_datetime' => $currentRateDateTime,
                 'rate_change' => $rateChange,
                 'rate_change_percent' => $rateChangePercent,
             ]);
+
+            $responses[] = $response;
+
+            $webhook
+                ->setLastResponseStatus($response['discord_response_status_code'])
+                ->setLastResponse($response['discord_response'])
+                ->setDatetimeLastSuccessfulResponse($response['discord_response_status_code'] === 204 ? new \DateTime() : null)
+            ;
+
+            $this->om->persist($webhook);
         }
+
+        $this->om->flush();
 
         return $responses;
     }
