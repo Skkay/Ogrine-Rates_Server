@@ -20,6 +20,9 @@ class DiscordWebhook
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $messageLocale = null;
+
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
@@ -51,6 +54,18 @@ class DiscordWebhook
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getMessageLocale(): ?string
+    {
+        return $this->messageLocale;
+    }
+
+    public function setMessageLocale(string $messageLocale): self
+    {
+        $this->messageLocale = $messageLocale;
 
         return $this;
     }

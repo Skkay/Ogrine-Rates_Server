@@ -25,7 +25,7 @@ class DiscordNotificationController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if ($data === null || !array_key_exists('url', $data)) {
+        if ($data === null || !array_key_exists('url', $data) || !array_key_exists('messageLocale', $data)) {
             throw new ApiException(JsonResponse::HTTP_BAD_REQUEST, 'Invalid JSON');
         }
 
@@ -34,6 +34,7 @@ class DiscordNotificationController extends AbstractController
         if ($discordWebhook === null) {
             $discordWebhook = (new DiscordWebhook())
                 ->setUrl($data['url'])
+                ->setMessageLocale($data['messageLocale'])
             ;
 
             $this->discordWebhookRepository->save($discordWebhook, true);
@@ -48,7 +49,7 @@ class DiscordNotificationController extends AbstractController
 
         return $this->json([
             'status' => 200,
-            'detail' => 'Dsicord webhook URL successfully removed',
+            'detail' => 'Discord webhook URL successfully removed',
         ]);
     }
 }
