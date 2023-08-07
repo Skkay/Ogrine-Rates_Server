@@ -20,11 +20,11 @@ class ApiExceptionNormalizer implements NormalizerInterface
     {
         $debug = $this->debug && ($context['debug'] ?? true);
 
-        $isApiException = $object->getClass() === ApiException::class;
-
         $data = [
-            'status' => $context['status'] ?? $object->getStatusCode(),
-            'detail' => $debug || $isApiException ? $object->getMessage() : $object->getStatusText(),
+            'type' => 'https://tools.ietf.org/html/rfc2616#section-10',
+            'title' => $object->getStatusText(),
+            'status' => $object->getStatusCode(),
+            'detail' => $object->getMessage(),
         ];
 
         if ($debug) {
@@ -37,6 +37,6 @@ class ApiExceptionNormalizer implements NormalizerInterface
 
     public function supportsNormalization($data, string $format = null, array $context = []): bool
     {
-        return $data instanceof FlattenException;
+        return $data instanceof FlattenException && method_exists($data, 'getClass') && $data->getClass() === ApiException::class;
     }
 }
