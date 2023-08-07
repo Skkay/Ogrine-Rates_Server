@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
+use App\DTO\DiscordWebhookDTO;
 use App\Entity\DiscordWebhook;
-use App\Exception\ApiException;
 use App\Repository\DiscordWebhookRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DiscordNotificationController extends AbstractController
@@ -21,20 +21,14 @@ class DiscordNotificationController extends AbstractController
     }
 
     #[Route('/discord-notification', name: 'app:discord_notification.add_or_remove', methods: ['POST'])]
-    public function addOrRemove(Request $request): JsonResponse
+    public function addOrRemove(#[MapRequestPayload] DiscordWebhookDTO $discordWebhookDTO): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
-
-        if ($data === null || !array_key_exists('url', $data) || !array_key_exists('messageLocale', $data)) {
-            throw new ApiException(JsonResponse::HTTP_BAD_REQUEST, 'Invalid JSON');
-        }
-
-        $discordWebhook = $this->discordWebhookRepository->findOneBy(['url' => $data['url']]);
+        $discordWebhook = $this->discordWebhookRepository->findOneBy(['url' => $discordWebhookDTO->url]);
 
         if ($discordWebhook === null) {
             $discordWebhook = (new DiscordWebhook())
-                ->setUrl($data['url'])
-                ->setMessageLocale($data['messageLocale'])
+                ->setUrl($discordWebhookDTO->url)
+                ->setMessageLocale($discordWebhookDTO->messageLocale)
             ;
 
             $this->discordWebhookRepository->save($discordWebhook, true);
