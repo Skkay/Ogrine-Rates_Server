@@ -13,7 +13,7 @@ notification:
                         other {*(+# Kamas, +{rate_change_percent}%)*}
                     }}
                     other {{rate_change, plural,
-                        one {*(-# Kama, -{rate_change_percent}%)*}
-                        other {*(-# Kamas, -{rate_change_percent}%)*}
+                        one {*(# Kama, {rate_change_percent}%)*}
+                        other {*(# Kamas, {rate_change_percent}%)*}
                     }}
                 }
