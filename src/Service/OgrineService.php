@@ -62,9 +62,17 @@ class OgrineService
 
     public function insertLatestOgrineValue(FetchedOgrineValues $fetchedOgrine)
     {
+        return $this->insertOgrineValue(
+            (new \DateTime())->setTimestamp($fetchedOgrine->getCurrentRateTimestamp()),
+            $fetchedOgrine->getCurrentRate() * 10
+        );
+    }
+
+    public function insertOgrineValue(\DateTimeInterface $datetime, int $rate)
+    {
         $ogrineRate = (new OgrineRate())
-            ->setRateTenth($fetchedOgrine->getCurrentRate() * 10)
-            ->setDatetime((new \DateTime())->setTimestamp($fetchedOgrine->getCurrentRateTimestamp()))
+            ->setRateTenth($rate)
+            ->setDatetime($datetime)
         ;
 
         $this->om->persist($ogrineRate);
