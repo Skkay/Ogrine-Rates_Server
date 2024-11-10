@@ -22,7 +22,9 @@ services:
       APP_SECRET: ${APP_SECRET}
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}?serverVersion=14
       REQUEST_OGRINE_FETCH_URL: https://www.dofus.com/fr/achat-kamas/cours-kama-ogrines
+      REQUEST_OGRINE_FETCH_REAL_TIME_URL: https://www.dofus.com/fr/achat-kamas/achat-ogrines/toutes-offres?sort=3A
       REQUEST_HEADER_USER_AGENT: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      REQUEST_HEADER_COOKIE: SID=sessionid
     ports:
       - 8000:80
     depends_on:

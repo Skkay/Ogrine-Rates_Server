@@ -5,7 +5,9 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.request.ogrine.fetch_url: '%env(resolve:REQUEST_OGRINE_FETCH_URL)%'
+    app.request.ogrine.fetch_real_time_url: '%env(resolve:REQUEST_OGRINE_FETCH_REAL_TIME_URL)%'
     app.request.header.user_agent: '%env(resolve:REQUEST_HEADER_USER_AGENT)%'
+    app.request.header.cookie: '%env(resolve:REQUEST_HEADER_COOKIE)%'
 
 services:
     # default configuration for services in *this* file
