@@ -1,4 +1,11 @@
-version: "3.4"
+volumes:
+  ###> doctrine/doctrine-bundle ###
+  db-data:
+    ###< doctrine/doctrine-bundle ###
+
+networks:
+  internal:
+
 
 services:
   app:
@@ -23,7 +30,7 @@ services:
     networks:
       - internal
 
-###> doctrine/doctrine-bundle ###
+  ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:14-alpine
     environment:
@@ -34,12 +41,4 @@ services:
       - db-data:/var/lib/postgresql/data:rw
     networks:
       - internal
-###< doctrine/doctrine-bundle ###
-
-volumes:
-###> doctrine/doctrine-bundle ###
-  db-data:
-###< doctrine/doctrine-bundle ###
-
-networks:
-  internal:
+  ###< doctrine/doctrine-bundle ###
