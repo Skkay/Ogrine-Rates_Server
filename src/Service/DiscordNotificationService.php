@@ -48,8 +48,11 @@ class DiscordNotificationService
             $webhook
                 ->setLastResponseStatus($response['discord_response_status_code'])
                 ->setLastResponse($response['discord_response'])
-                ->setDatetimeLastSuccessfulResponse($response['discord_response_status_code'] === 204 ? new \DateTime() : null)
             ;
+
+            if ($response['discord_response_status_code'] === 204) {
+                $webhook->setDatetimeLastSuccessfulResponse(new \DateTime());
+            }
 
             $this->om->persist($webhook);
         }
