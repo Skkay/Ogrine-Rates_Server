@@ -11,7 +11,7 @@ up-prod:
 	docker compose -f docker-compose.yml --env-file .env.dev.docker up
 
 down:
-	docker compose down --remove-orphans
+	docker compose  --env-file .env.dev.docker down --remove-orphans
 
 bash:
 	docker exec -it ogrine-rates_server /bin/bash
